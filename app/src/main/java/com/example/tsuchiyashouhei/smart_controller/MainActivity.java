@@ -1,15 +1,20 @@
 package com.example.tsuchiyashouhei.smart_controller;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -62,24 +67,37 @@ public class MainActivity extends ListActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private class TweetAdapter extends ArrayAdapter<String> {
+    private class TweetAdapter extends ArrayAdapter<Status> {
+
+        private LayoutInflater mInflater;
 
         public TweetAdapter(Context context) {
             super(context, android.R.layout.simple_list_item_1);
+            mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = mInflater.inflate(R.layout.list_item_tweet, null);
+            }
+            Status item = getItem(position);
+            TextView name = (TextView) convertView.findViewById(R.id.name);
+            name.setText(item.getUser().getName());
+            TextView screenName = (TextView) convertView.findViewById(R.id.screen_name);
+            screenName.setText("@" + item.getUser().getScreenName());
+            TextView text = (TextView) convertView.findViewById(R.id.text);
+            text.setText(item.getText());
+            return convertView;
         }
     }
 
     private void reloadTimeLine() {
-        @SuppressLint("StaticFieldLeak") AsyncTask<Void, Void, List<String>> task = new AsyncTask<Void, Void, List<String>>() {
+        @SuppressLint("StaticFieldLeak") AsyncTask<Void, Void, List<twitter4j.Status>> task = new AsyncTask<Void, Void, List<twitter4j.Status>>() {
             @Override
-            protected List<String> doInBackground(Void... params) {
+            protected List<twitter4j.Status> doInBackground(Void... params) {
                 try {
-                    ResponseList<twitter4j.Status> timeline = mTwitter.getHomeTimeline();
-                    ArrayList<String> list = new ArrayList<String>();
-                    for (twitter4j.Status status : timeline) {
-                        list.add(status.getText());
-                    }
-                    return list;
+                    return mTwitter.getHomeTimeline();
                 } catch (TwitterException e) {
                     e.printStackTrace();
                 }
@@ -87,10 +105,10 @@ public class MainActivity extends ListActivity {
             }
 
             @Override
-            protected void onPostExecute(List<String> result) {
+            protected void onPostExecute(List<twitter4j.Status> result) {
                 if (result != null) {
                     mAdapter.clear();
-                    for (String status : result) {
+                    for (twitter4j.Status status : result) {
                         mAdapter.add(status);
                     }
                     getListView().setSelection(0);
