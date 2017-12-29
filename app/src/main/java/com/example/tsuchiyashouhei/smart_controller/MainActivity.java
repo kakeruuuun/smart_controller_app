@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -26,7 +29,6 @@ public class MainActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (!TwitterUtils.hasAccessToken(this)) {
             Intent intent = new Intent(this, TwitterOAuthActivity.class);
             startActivity(intent);
@@ -38,6 +40,26 @@ public class MainActivity extends ListActivity {
             mTwitter = TwitterUtils.getTwitterInstance(this);
             reloadTimeLine();
         }
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_refresh:
+                reloadTimeLine();
+                return true;
+            case R.id.menu_tweet:
+                Intent intent = new Intent(this, TweetActivity.class);
+                startActivity(intent);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private class TweetAdapter extends ArrayAdapter<String> {
@@ -83,5 +105,7 @@ public class MainActivity extends ListActivity {
     private void showToast(String text) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
+
+
 }
 
