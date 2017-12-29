@@ -1,49 +1,87 @@
 package com.example.tsuchiyashouhei.smart_controller;
 
+import android.annotation.SuppressLint;
+import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
+
+import twitter4j.ResponseList;
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+
+
+public class MainActivity extends ListActivity {
+
+    private TweetAdapter mAdapter;
+    private Twitter mTwitter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         if (!TwitterUtils.hasAccessToken(this)) {
             Intent intent = new Intent(this, TwitterOAuthActivity.class);
             startActivity(intent);
             finish();
+        } else {
+            mAdapter = new TweetAdapter(this);
+            setListAdapter(mAdapter);
+
+            mTwitter = TwitterUtils.getTwitterInstance(this);
+            reloadTimeLine();
         }
     }
 
+    private class TweetAdapter extends ArrayAdapter<String> {
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        public TweetAdapter(Context context) {
+            super(context, android.R.layout.simple_list_item_1);
+        }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    private void reloadTimeLine() {
+        @SuppressLint("StaticFieldLeak") AsyncTask<Void, Void, List<String>> task = new AsyncTask<Void, Void, List<String>>() {
+            @Override
+            protected List<String> doInBackground(Void... params) {
+                try {
+                    ResponseList<twitter4j.Status> timeline = mTwitter.getHomeTimeline();
+                    ArrayList<String> list = new ArrayList<String>();
+                    for (twitter4j.Status status : timeline) {
+                        list.add(status.getText());
+                    }
+                    return list;
+                } catch (TwitterException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+            @Override
+            protected void onPostExecute(List<String> result) {
+                if (result != null) {
+                    mAdapter.clear();
+                    for (String status : result) {
+                        mAdapter.add(status);
+                    }
+                    getListView().setSelection(0);
+                } else {
+                    showToast("タイムラインの取得に失敗しました。。。");
+                }
+            }
+        };
+        task.execute();
+    }
 
-        return super.onOptionsItemSelected(item);
+    private void showToast(String text) {
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 }
+
