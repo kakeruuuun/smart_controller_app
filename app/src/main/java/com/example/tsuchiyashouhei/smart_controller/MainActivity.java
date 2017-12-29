@@ -24,6 +24,8 @@ import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
+import com.loopj.android.image.SmartImageView;
+
 
 
 public class MainActivity extends ListActivity {
@@ -88,6 +90,8 @@ public class MainActivity extends ListActivity {
             screenName.setText("@" + item.getUser().getScreenName());
             TextView text = (TextView) convertView.findViewById(R.id.text);
             text.setText(item.getText());
+            SmartImageView icon = (SmartImageView) convertView.findViewById(R.id.icon);
+            icon.setImageUrl(item.getUser().getProfileImageURL());
             return convertView;
         }
     }
