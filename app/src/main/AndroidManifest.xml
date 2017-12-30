@@ -34,6 +34,11 @@
                     android:scheme="gabu" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".TweetActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".TimelineActivity"/>
     </application>
 
 </manifest>
