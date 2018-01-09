@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import twitter4j.DirectMessage;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 
@@ -27,9 +28,7 @@ public class TweetActivity extends FragmentActivity {
 
         findViewById(R.id.action_tweet).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                tweet();
-            }
+            public void onClick(View v) { sendDM(); }
         });
     }
 
@@ -57,6 +56,32 @@ public class TweetActivity extends FragmentActivity {
             }
         };
         task.execute(mInputText.getText().toString());
+    }
+
+    private void sendDM() {
+        AsyncTask<String, Void, Boolean> task = new AsyncTask<String, Void, Boolean>() {
+            @Override
+            protected Boolean doInBackground(String... params) {
+                try {
+                    mTwitter.sendDirectMessage(params[0], params[1]);
+                    return true;
+                } catch (TwitterException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Boolean result) {
+                if (result) {
+                    showToast("DMが完了しました！");
+                    finish();
+                } else {
+                    showToast("DMに失敗しました。。。");
+                }
+            }
+        };
+        task.execute("debian114514", mInputText.getText().toString());
     }
 
     private void showToast(String text) {
