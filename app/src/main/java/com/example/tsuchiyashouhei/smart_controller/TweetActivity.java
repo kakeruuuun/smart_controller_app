@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import twitter4j.DirectMessage;
@@ -14,8 +16,11 @@ import twitter4j.TwitterException;
 
 public class TweetActivity extends FragmentActivity {
 
-    private EditText mInputText;
     private Twitter mTwitter;
+    private String     message;
+    private String     room;
+    private String     obj;
+    private String     status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,39 +29,15 @@ public class TweetActivity extends FragmentActivity {
 
         mTwitter = TwitterUtils.getTwitterInstance(this);
 
-        mInputText = (EditText) findViewById(R.id.input_text);
 
         findViewById(R.id.action_tweet).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { sendDM(); }
         });
+
     }
 
-    private void tweet() {
-        AsyncTask<String, Void, Boolean> task = new AsyncTask<String, Void, Boolean>() {
-            @Override
-            protected Boolean doInBackground(String... params) {
-                try {
-                    mTwitter.updateStatus(params[0]);
-                    return true;
-                } catch (TwitterException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-            }
 
-            @Override
-            protected void onPostExecute(Boolean result) {
-                if (result) {
-                    showToast("ツイートが完了しました！");
-                    finish();
-                } else {
-                    showToast("ツイートに失敗しました。。。");
-                }
-            }
-        };
-        task.execute(mInputText.getText().toString());
-    }
 
     private void sendDM() {
         AsyncTask<String, Void, Boolean> task = new AsyncTask<String, Void, Boolean>() {
@@ -81,7 +62,13 @@ public class TweetActivity extends FragmentActivity {
                 }
             }
         };
-        task.execute("debian114514", mInputText.getText().toString());
+        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+        int roomId = radioGroup.getCheckedRadioButtonId();
+        if(roomId == R.id.action_myroom)        room = "myroom";
+        else if(roomId == R.id.action_living)   room = "living";
+
+        message = room + "airconoff";
+        task.execute("debian114514", message);
     }
 
     private void showToast(String text) {
