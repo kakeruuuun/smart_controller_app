@@ -1,16 +1,12 @@
 package com.example.tsuchiyashouhei.smart_controller;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import twitter4j.DirectMessage;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 
@@ -62,12 +58,56 @@ public class TweetActivity extends FragmentActivity {
                 }
             }
         };
-        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
-        int roomId = radioGroup.getCheckedRadioButtonId();
-        if(roomId == R.id.action_myroom)        room = "myroom";
-        else if(roomId == R.id.action_living)   room = "living";
+        RadioGroup room_radio = (RadioGroup) findViewById(R.id.RoomGroup);
+        RadioGroup obj_radio = (RadioGroup) findViewById(R.id.ObjGroup);
+        RadioGroup status_radio = (RadioGroup) findViewById(R.id.StatusGroup);
 
-        message = room + "airconoff";
+        int roomId = room_radio.getCheckedRadioButtonId();
+        int objId = obj_radio.getCheckedRadioButtonId();
+        int statusId = status_radio.getCheckedRadioButtonId();
+
+        switch (roomId)
+        {
+            case R.id.action_myroom:
+                room = "myroom";
+                break;
+            case R.id.action_living:
+                room = "living";
+                break;
+            default:
+                room = "myroom";
+        }
+
+        switch (objId)
+        {
+            case R.id.action_light:
+                obj = "light_";
+                break;
+            case R.id.action_tv:
+                obj = "tv____";
+                break;
+            case R.id.action_aircon:
+                obj = "aircon";
+                break;
+            default:
+                obj = "light_";
+        }
+
+        switch (statusId)
+        {
+            case R.id.action_on:
+                status = "on_";
+                break;
+            case R.id.action_off:
+                status = "off";
+                break;
+            default:
+                status = "off";
+        }
+
+
+
+        message = room + obj + status;
         task.execute("debian114514", message);
     }
 

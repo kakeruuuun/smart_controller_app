@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="つぶやく" />
+        android:text="DM送信" />
 
     <RadioGroup
         android:layout_width="wrap_content"
@@ -19,7 +19,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="52dp"
         android:layout_marginTop="60dp"
-        android:id="@+id/radioGroup" >
+        android:id="@+id/RoomGroup" >
 
         <RadioButton
             android:id="@+id/action_living"
@@ -43,24 +43,26 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/textView4"
         android:layout_below="@+id/textView4"
-        android:layout_marginTop="21dp">
+        android:layout_marginTop="21dp"
+        android:id="@+id/ObjGroup">
 
         <RadioButton
-            android:id="@+id/radioButton10"
+            android:id="@+id/action_light"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:checked="true"
             android:text="照明" />
 
         <RadioButton
-            android:id="@+id/radioButton11"
+            android:id="@+id/action_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="テレビ" />
 
         <RadioButton
-            android:id="@+id/radioButton12"
+            android:id="@+id/action_aircon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -72,7 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/radioGroup"
+        android:layout_alignStart="@+id/RoomGroup"
         android:layout_marginTop="24dp"
         android:text="部屋選択" />
 
@@ -80,9 +82,42 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/radioGroup"
-        android:layout_below="@+id/radioGroup"
+        android:layout_alignStart="@+id/RoomGroup"
+        android:layout_below="@+id/RoomGroup"
         android:layout_marginTop="26dp"
         android:text="家電選択" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/textView4"
+        android:layout_below="@+id/ObjGroup"
+        android:layout_marginTop="28dp"
+        android:text="ON / OFF" />
+
+    <RadioGroup
+        android:id="@+id/StatusGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/ObjGroup"
+        android:layout_below="@+id/ObjGroup"
+        android:layout_marginTop="64dp">
+
+        <RadioButton
+            android:id="@+id/action_on"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="ON" />
+
+        <RadioButton
+            android:id="@+id/action_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="OFF" />
+    </RadioGroup>
 
 </RelativeLayout>
