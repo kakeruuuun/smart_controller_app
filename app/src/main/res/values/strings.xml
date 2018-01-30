@@ -6,6 +6,6 @@
     <string name="twitter_consumer_key">DdWgvUB0D2dP1HgVzC7SqzDWZ</string>
     <string name="twitter_consumer_secret">7EbQ1P0q235NjR0l1YBlwoNjDDGiRiwiptaGmqqD2laByustCf</string>
     <string name="twitter_callback_url">gabu://twitter</string>
-    <string name="menu_tweet">つぶやき</string>
-    <string name="menu_refresh">更新</string>
+    <string name="menu_DM">DM</string>
+    <string name="menu_TL">設定</string>
 </resources>
