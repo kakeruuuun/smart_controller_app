@@ -22,19 +22,19 @@
         android:id="@+id/RoomGroup" >
 
         <RadioButton
-            android:id="@+id/action_living"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="リビング" />
-
-        <RadioButton
             android:id="@+id/action_myroom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:checked="true"
             android:text="マイルーム" />
+
+        <RadioButton
+            android:id="@+id/action_living"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="リビング" />
 
     </RadioGroup>
 
@@ -47,18 +47,11 @@
         android:id="@+id/ObjGroup">
 
         <RadioButton
-            android:id="@+id/action_light"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="照明" />
-
-        <RadioButton
             android:id="@+id/action_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:checked="true"
             android:text="テレビ" />
 
         <RadioButton
@@ -67,6 +60,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="エアコン" />
+
+        <RadioButton
+            android:id="@+id/action_light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="照明" />
     </RadioGroup>
 
     <TextView
